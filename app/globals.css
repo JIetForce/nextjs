@@ -93,6 +93,41 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+
+  text-align: center;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #242424;
+  height: 48px;
+  width: 100%;
+  margin: auto;
+}
+
+header a {
+  width: 100px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  min-height: calc(100vh - 96px);
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #242424;
+  height: 48px;
+  width: 100%;
+  margin: auto;
 }
 
 a {
