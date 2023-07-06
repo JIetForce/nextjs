@@ -1,37 +1,41 @@
+'use client';
+
+import { PostSearch } from '@/components/PostSearch';
+import { Posts } from '@/components/Posts';
+import { getAllPosts, getPostBySearch } from '@/services/getPosts';
 import { Metadata } from 'next';
-import Link from 'next/link';
-
-async function getData() {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
-    next: {
-      revalidate: 10,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch data from the server');
-  }
-
-  return response.json();
-}
+import { useEffect, useState } from 'react';
 
 export const metadata: Metadata = {
   title: 'Blog | Next App',
 };
 
-export default async function Blog() {
-  const posts = await getData();
+type Post = {
+  body: string;
+  id: number;
+  title: string;
+  userId: number;
+};
+
+export default function Blog() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllPosts()
+      .then(setPosts)
+      .finally(() => setLoading(false));
+  }, []);
+
+  const onSearch = (search: string) => {
+    getPostBySearch(search).then(setPosts);
+  };
 
   return (
     <>
       <h1>Blog Page</h1>
-      <ul>
-        {posts.map((post: any) => (
-          <li key={post.id}>
-            <Link href={`/blog/${post.id}`}>{post.title}</Link>
-          </li>
-        ))}
-      </ul>
+      <PostSearch onSearch={onSearch} />
+      {loading ? <h3>Loading...</h3> : <Posts posts={posts} />}
     </>
   );
 }
